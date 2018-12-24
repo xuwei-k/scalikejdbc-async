@@ -27,7 +27,7 @@ lazy val core = (project in file("core")).settings(
        "org.postgresql"      %  "postgresql"                        % postgresqlVersion  % "test",
        "mysql"               %  "mysql-connector-java"              % "5.1.+"            % "test",
        "org.scalatest"       %% "scalatest"                         % "3.0.+"            % "test",
-       "ch.qos.logback"      %  "logback-classic"                   % "1.2.+"            % "test"
+       "ch.qos.logback"      %  "logback-classic"                   % "1.3.0-alpha4"            % "test"
     )
   },
   sbtPlugin := false,
