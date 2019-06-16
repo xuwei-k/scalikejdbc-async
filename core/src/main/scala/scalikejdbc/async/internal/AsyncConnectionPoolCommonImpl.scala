@@ -1,7 +1,7 @@
 package scalikejdbc.async.internal
 
-import com.github.mauricio.async.db.{ Configuration, Connection }
-import com.github.mauricio.async.db.pool.{ ConnectionPool, ObjectFactory, PoolConfiguration }
+import com.github.jasync.sql.db.{ Configuration, Connection, ConnectionPoolConfiguration, ConnectionPoolConfigurationBuilder }
+import com.github.jasync.sql.db.pool.{ ConnectionPool, ObjectFactory, PoolConfiguration }
 import scalikejdbc.LogSupport
 import scalikejdbc.async.{ AsyncConnectionPool, AsyncConnectionPoolSettings, NonSharedAsyncConnection }
 
@@ -13,12 +13,16 @@ abstract class AsyncConnectionPoolCommonImpl[T <: Connection](
   settings: AsyncConnectionPoolSettings = AsyncConnectionPoolSettings()) extends AsyncConnectionPool(settings) with MauricioConfiguration with LogSupport {
 
   private[this] val factory = factoryF(configuration(url, user, password, settings.connectionSettings))
+
   private[internal] val pool = new ConnectionPool[T](
-    factory = factory,
-    configuration = PoolConfiguration(
-      maxObjects = settings.maxPoolSize,
-      maxIdle = settings.maxIdleMillis,
-      maxQueueSize = settings.maxQueueSize))
+    factory,
+    {
+      val builder = new ConnectionPoolConfigurationBuilder()
+      builder.setMaxActiveConnections(settings.maxPoolSize)
+      builder.setMaxIdleTime(settings.maxIdleMillis)
+      builder.setMaxPendingQueries(settings.maxQueueSize)
+      builder.build()
+    })
 
   override def close(): Unit = pool.disconnect
 

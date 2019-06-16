@@ -15,10 +15,12 @@
  */
 package scalikejdbc.async.internal.postgresql
 
-import com.github.mauricio.async.db._
+import com.github.jasync.sql.db._
 import scala.concurrent._
 import scala.util.Try
 import scalikejdbc.async._, ShortenedNames._, internal._
+import scala.compat.java8.FutureConverters._
+import scala.collection.JavaConverters._
 
 /**
  * PostgreSQL Connection Implementation
@@ -29,7 +31,7 @@ trait PostgreSQLConnectionImpl extends AsyncConnectionCommonImpl {
 
     if (this.isInstanceOf[PoolableAsyncConnection[_]]) {
       val pool = this.asInstanceOf[PoolableAsyncConnection[Connection]].pool
-      pool.take.map(conn => new NonSharedAsyncConnectionImpl(conn, Some(pool)) with PostgreSQLConnectionImpl)
+      pool.take.toScala.map(conn => new NonSharedAsyncConnectionImpl(conn, Some(pool)) with PostgreSQLConnectionImpl)
     } else {
       Future.successful(new NonSharedAsyncConnectionImpl(underlying) with PostgreSQLConnectionImpl)
     }
@@ -37,10 +39,10 @@ trait PostgreSQLConnectionImpl extends AsyncConnectionCommonImpl {
 
   protected def extractGeneratedKey(queryResult: QueryResult)(implicit cxt: EC = ECGlobal): Future[Option[Long]] = {
     ensureNonShared()
+    val rows = queryResult.getRows.asScala
     Future.successful(for {
-      rows <- queryResult.rows
       row <- rows.headOption
-      value <- Option(row(0))
+      value <- Option(row.get(0))
       key <- Try(value.toString.toLong).toOption
     } yield key)
   }

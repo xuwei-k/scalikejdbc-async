@@ -15,9 +15,9 @@
  */
 package scalikejdbc.async.internal
 
-import com.github.mauricio.async.db.pool.ConnectionPool
+import com.github.jasync.sql.db.pool.ConnectionPool
 import scalikejdbc.async.{ NonSharedAsyncConnection, AsyncConnection }
-import com.github.mauricio.async.db.Connection
+import com.github.jasync.sql.db.Connection
 import scala.concurrent._
 import scalikejdbc.async.ShortenedNames._
 

@@ -25,8 +25,8 @@ private[scalikejdbc] case class SingleAsyncPostgreSQLConnection(url: String, use
   with PostgreSQLConnectionImpl
   with MauricioConfiguration {
 
-  private[scalikejdbc] val underlying: com.github.mauricio.async.db.Connection = {
-    new com.github.mauricio.async.db.postgresql.PostgreSQLConnection(configuration(url, user, password, connectionSettings))
+  private[scalikejdbc] val underlying: com.github.jasync.sql.db.Connection = {
+    new com.github.jasync.sql.db.postgresql.PostgreSQLConnection(configuration(url, user, password, connectionSettings))
   }
 
 }
