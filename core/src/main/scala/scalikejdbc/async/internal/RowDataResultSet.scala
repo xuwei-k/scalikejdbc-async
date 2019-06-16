@@ -7,7 +7,7 @@ import java.sql._
 import java.util
 import java.util.Calendar
 
-import com.github.mauricio.async.db.RowData
+import com.github.jasync.sql.db.RowData
 import org.joda.time.{ LocalTime, LocalDate, LocalDateTime, DateTime }
 import scalikejdbc._
 
@@ -471,10 +471,10 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
     // To be compatible with JDBC, index should be 1-origin
     // But postgresql-async/mysql-async is 0-origin
     val index0origin = columnIndex - 1
-    currentRow.map(_.apply(index0origin)).orNull[Any]
+    currentRow.map(_.get(index0origin)).orNull[Any]
   }
 
-  private def any(columnLabel: String): Any = currentRow.map(_.apply(columnLabel)).orNull[Any]
+  private def any(columnLabel: String): Any = currentRow.map(_.get(columnLabel)).orNull[Any]
 
   private def anyOpt(columnIndex: Int): Option[Any] = Option(any(columnIndex))
 

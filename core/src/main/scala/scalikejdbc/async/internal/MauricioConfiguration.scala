@@ -15,7 +15,7 @@
  */
 package scalikejdbc.async.internal
 
-import com.github.mauricio.async.db.Configuration
+import com.github.jasync.sql.db.Configuration
 import scalikejdbc.JDBCUrl
 import scalikejdbc.async.AsyncConnectionSettings
 
@@ -24,7 +24,7 @@ import scalikejdbc.async.AsyncConnectionSettings
  */
 private[scalikejdbc] trait MauricioConfiguration {
 
-  val defaultConfiguration = Configuration("")
+  val defaultConfiguration = new Configuration("")
 
   private[scalikejdbc] def configuration(
     url: String,
@@ -32,19 +32,22 @@ private[scalikejdbc] trait MauricioConfiguration {
     password: String,
     connectionSettings: AsyncConnectionSettings) = {
     val jdbcUrl = JDBCUrl(url)
-    Configuration(
-      username = user,
-      host = jdbcUrl.host,
-      port = jdbcUrl.port,
-      password = Option(password).filterNot(_.trim.isEmpty),
-      database = Option(jdbcUrl.database).filterNot(_.trim.isEmpty),
-      ssl = connectionSettings.ssl.getOrElse(defaultConfiguration.ssl),
-      charset = connectionSettings.charset.getOrElse(defaultConfiguration.charset),
-      maximumMessageSize = connectionSettings.maximumMessageSize.getOrElse(defaultConfiguration.maximumMessageSize),
-      allocator = connectionSettings.allocator.getOrElse(defaultConfiguration.allocator),
-      connectTimeout = connectionSettings.connectTimeout.getOrElse(defaultConfiguration.connectTimeout),
-      testTimeout = connectionSettings.testTimeout.getOrElse(defaultConfiguration.testTimeout),
-      queryTimeout = connectionSettings.queryTimeout)
+    new Configuration(
+      user,
+      jdbcUrl.host,
+      jdbcUrl.port,
+      password,
+      jdbcUrl.database,
+      connectionSettings.ssl.getOrElse(defaultConfiguration.getSsl),
+      connectionSettings.charset.getOrElse(defaultConfiguration.getCharset),
+      connectionSettings.maximumMessageSize.getOrElse(defaultConfiguration.getMaximumMessageSize),
+      connectionSettings.allocator.getOrElse(defaultConfiguration.getAllocator),
+      connectionSettings.connectTimeout.map(_.toMillis.toInt).getOrElse(defaultConfiguration.getConnectionTimeout),
+      connectionSettings.queryTimeout.map(x => java.time.Duration.ofMillis(x.toMillis)).getOrElse(defaultConfiguration.getQueryTimeout),
+      defaultConfiguration.getApplicationName,
+      defaultConfiguration.getInterceptors,
+      defaultConfiguration.getEventLoopGroup,
+      defaultConfiguration.getExecutionContext)
   }
 
 }
