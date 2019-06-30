@@ -1,11 +1,11 @@
 package scalikejdbc.async.internal
 
-import com.github.jasync.sql.db.{ Configuration, Connection, ConnectionPoolConfiguration, ConnectionPoolConfigurationBuilder }
-import com.github.jasync.sql.db.pool.{ ConnectionPool, ObjectFactory, PoolConfiguration }
+import com.github.jasync.sql.db.{ ConcreteConnection, Configuration, ConnectionPoolConfigurationBuilder }
+import com.github.jasync.sql.db.pool.{ ConnectionPool, ObjectFactory }
 import scalikejdbc.LogSupport
 import scalikejdbc.async.{ AsyncConnectionPool, AsyncConnectionPoolSettings, NonSharedAsyncConnection }
 
-abstract class AsyncConnectionPoolCommonImpl[T <: Connection](
+abstract class AsyncConnectionPoolCommonImpl[T <: ConcreteConnection](
   url: String,
   user: String,
   password: String,

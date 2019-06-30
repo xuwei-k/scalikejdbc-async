@@ -26,7 +26,7 @@ import scala.collection.JavaConverters._
  */
 private[scalikejdbc] trait AsyncConnectionCommonImpl extends AsyncConnection {
 
-  private[scalikejdbc] val underlying: Connection
+  private[scalikejdbc] val underlying: ConcreteConnection
   private[scalikejdbc] val defaultTimeout = 10.seconds
 
   override def isActive: Boolean = underlying.isConnected

@@ -16,8 +16,9 @@
 package scalikejdbc.async.internal
 
 import com.github.jasync.sql.db.pool.ConnectionPool
-import scalikejdbc.async.{ NonSharedAsyncConnection, AsyncConnection }
-import com.github.jasync.sql.db.Connection
+import scalikejdbc.async.{ AsyncConnection, NonSharedAsyncConnection }
+import com.github.jasync.sql.db.{ ConcreteConnection, Connection }
+
 import scala.concurrent._
 import scalikejdbc.async.ShortenedNames._
 
@@ -27,13 +28,13 @@ import scalikejdbc.async.ShortenedNames._
  * @param pool connection pool
  * @tparam T Connection sub type
  */
-private[scalikejdbc] abstract class PoolableAsyncConnection[T <: Connection](val pool: ConnectionPool[T])
+private[scalikejdbc] abstract class PoolableAsyncConnection[T <: ConcreteConnection](val pool: ConnectionPool[T])
   extends AsyncConnectionCommonImpl {
 
   override def toNonSharedConnection()(implicit cxt: EC = ECGlobal): Future[NonSharedAsyncConnection] =
     Future.failed(new UnsupportedOperationException)
 
-  private[scalikejdbc] val underlying: Connection = pool
+  private[scalikejdbc] val underlying: ConcreteConnection = pool
 
   /**
    * Close or release this connection.
