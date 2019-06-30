@@ -4,6 +4,7 @@ import java.io.{ StringReader, ByteArrayInputStream, Reader, InputStream }
 import java.math.BigDecimal
 import java.net.URL
 import java.sql._
+import java.time.Duration
 import java.util
 import java.util.Calendar
 
@@ -524,6 +525,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
     case null => null
     case t: java.sql.Time => t
     case TimeInMillis(ms) => new java.sql.Time(ms)
+    case d: Duration => new java.sql.Time(d.toMillis)
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #time!")
   }
@@ -536,6 +538,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
     case null => null
     case t: java.sql.Timestamp => t
     case TimeInMillis(ms) => new java.sql.Timestamp(ms)
+    case d: Duration => new java.sql.Timestamp(d.toMillis)
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #timestamp!")
   }
