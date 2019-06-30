@@ -10,7 +10,7 @@ abstract class AsyncConnectionPoolCommonImpl[T <: ConcreteConnection](
   user: String,
   password: String,
   factoryF: Configuration => ObjectFactory[T],
-  settings: AsyncConnectionPoolSettings = AsyncConnectionPoolSettings()) extends AsyncConnectionPool(settings) with MauricioConfiguration with LogSupport {
+  settings: AsyncConnectionPoolSettings = AsyncConnectionPoolSettings()) extends AsyncConnectionPool(settings) with JasyncConfiguration with LogSupport {
 
   private[this] val factory = factoryF(configuration(url, user, password, settings.connectionSettings))
 

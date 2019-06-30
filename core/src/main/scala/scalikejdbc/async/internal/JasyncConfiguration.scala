@@ -22,7 +22,7 @@ import scalikejdbc.async.AsyncConnectionSettings
 /**
  * Configuration attribute
  */
-private[scalikejdbc] trait MauricioConfiguration {
+private[scalikejdbc] trait JasyncConfiguration {
 
   val defaultConfiguration = new Configuration("")
 

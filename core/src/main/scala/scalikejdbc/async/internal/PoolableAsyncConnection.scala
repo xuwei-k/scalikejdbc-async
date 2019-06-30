@@ -25,7 +25,7 @@ import scala.concurrent._
 import scalikejdbc.async.ShortenedNames._
 
 /**
- * AsyncConnection implementation which is based on Mauricio's Connection
+ * AsyncConnection implementation which is based on jasync's Connection
  *
  * @param pool connection pool
  * @tparam T Connection sub type
@@ -36,7 +36,7 @@ private[scalikejdbc] abstract class PoolableAsyncConnection[T <: ConcreteConnect
   override def toNonSharedConnection()(implicit cxt: EC = ECGlobal): Future[NonSharedAsyncConnection] =
     Future.failed(new UnsupportedOperationException)
 
-  private[scalikejdbc] val underlying = pool.take().get(5, TimeUnit.SECONDS)
+  private[scalikejdbc] lazy val underlying = pool.take().get(5, TimeUnit.SECONDS)
 
   /**
    * Close or release this connection.

@@ -23,7 +23,7 @@ import scalikejdbc.async._, internal._
 private[scalikejdbc] case class SingleAsyncPostgreSQLConnection(url: String, user: String, private val password: String, connectionSettings: AsyncConnectionSettings)
   extends AsyncConnectionCommonImpl
   with PostgreSQLConnectionImpl
-  with MauricioConfiguration {
+  with JasyncConfiguration {
 
   private[scalikejdbc] val underlying = {
     new com.github.jasync.sql.db.postgresql.PostgreSQLConnection(configuration(url, user, password, connectionSettings))

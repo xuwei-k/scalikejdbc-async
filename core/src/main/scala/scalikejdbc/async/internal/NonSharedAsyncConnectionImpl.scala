@@ -1,7 +1,7 @@
 package scalikejdbc.async.internal
 
 import com.github.jasync.sql.db.ConcreteConnection
-import com.github.jasync.sql.db.pool.{ ConnectionPool => MauricioConnectionPool }
+import com.github.jasync.sql.db.pool.ConnectionPool
 import scalikejdbc.async.NonSharedAsyncConnection
 
 import scala.concurrent._
@@ -14,7 +14,7 @@ import scalikejdbc.async.ShortenedNames._
  */
 abstract class NonSharedAsyncConnectionImpl(
   val underlying: ConcreteConnection,
-  val pool: Option[MauricioConnectionPool[ConcreteConnection]] = None)
+  val pool: Option[ConnectionPool[ConcreteConnection]] = None)
   extends AsyncConnectionCommonImpl
   with NonSharedAsyncConnection {
 
