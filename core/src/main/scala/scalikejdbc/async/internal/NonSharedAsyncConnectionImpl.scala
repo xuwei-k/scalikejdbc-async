@@ -10,7 +10,7 @@ import scalikejdbc.async.ShortenedNames._
 /**
  * Non-shared Asynchronous Connection
  * @param underlying jasync connection
- * @param pool jasync connection
+ * @param pool jasync connection pool
  */
 abstract class NonSharedAsyncConnectionImpl(
   val underlying: ConcreteConnection,

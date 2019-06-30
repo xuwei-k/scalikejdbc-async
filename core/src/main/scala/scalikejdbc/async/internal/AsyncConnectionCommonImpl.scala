@@ -15,9 +15,14 @@
  */
 package scalikejdbc.async.internal
 
-import scalikejdbc.async._, ShortenedNames._
-import scala.concurrent._, duration.DurationInt
+import scalikejdbc.async._
+import ShortenedNames._
+
+import scala.concurrent._
+import duration.DurationInt
 import com.github.jasync.sql.db._
+import com.github.jasync.sql.db.pool.ConnectionPool
+
 import scala.compat.java8.FutureConverters._
 import scala.collection.JavaConverters._
 

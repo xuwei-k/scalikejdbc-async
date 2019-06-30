@@ -34,13 +34,13 @@ private[scalikejdbc] abstract class PoolableAsyncConnection[T <: ConcreteConnect
   override def toNonSharedConnection()(implicit cxt: EC = ECGlobal): Future[NonSharedAsyncConnection] =
     Future.failed(new UnsupportedOperationException)
 
-  private[scalikejdbc] val underlying: ConcreteConnection = pool
+  private[scalikejdbc] val underlying = pool.take().get()
 
   /**
    * Close or release this connection.
    */
   override def close(): Unit = {
-    pool.asInstanceOf[ConnectionPool[Connection]].giveBack(underlying)
+    pool.giveBack(underlying)
   }
 
 }
