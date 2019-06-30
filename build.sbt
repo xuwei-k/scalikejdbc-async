@@ -5,15 +5,16 @@ lazy val postgresqlVersion = "42.2.2"
 lazy val testContainer = "1.11.3"
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.8"
+val Scala212 = "2.13.0"
 
-crossScalaVersions := Seq(Scala212)
+crossScalaVersions := Seq(Scala213, Scala212, Scala211)
 
 lazy val core = (project in file("core")).settings(
   organization := "org.scalikejdbc",
   name := "scalikejdbc-async",
   version := _version,
   scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212),
+  crossScalaVersions := Seq(Scala213, Scala212, Scala211),
   publishTo := _publishTo(version.value),
   publishMavenStyle := true,
   resolvers ++= _resolvers,
@@ -37,7 +38,15 @@ lazy val core = (project in file("core")).settings(
   },
   sbtPlugin := false,
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
-  scalacOptions ++= _scalacOptions,
+  scalacOptions ++= Seq("-deprecation", "-unchecked")
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        Seq("-Xfuture")
+      case _ =>
+        Nil
+    }
+  },
   publishMavenStyle := true,
   publishArtifact in Test := false,
   parallelExecution in Test := false,
@@ -53,7 +62,6 @@ def _publishTo(v: String) = {
 val _resolvers = Seq(
   "sonatype releases"  at "https://oss.sonatype.org/content/repositories/releases"
 )
-val _scalacOptions = Seq("-deprecation", "-unchecked", "-Xfuture")
 val _pomExtra = <url>http://scalikejdbc.org/</url>
       <licenses>
         <license>
