@@ -501,7 +501,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToDate(any: Any): java.sql.Date = any match {
     case null => null
     case d: java.sql.Date => d
-    case TimeInMillis(ms) => new UnixTimeInMillisConverter(ms).toSqlDate
+    case AsDateTimeConverter(x) => x.toSqlDate
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #date!")
   }
@@ -523,7 +523,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToTime(any: Any): java.sql.Time = any match {
     case null => null
     case t: java.sql.Time => t
-    case TimeInMillis(ms) => new java.sql.Time(ms)
+    case AsDateTimeConverter(x) => x.toSqlTime
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #time!")
   }
@@ -535,7 +535,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToTimestamp(any: Any): java.sql.Timestamp = any match {
     case null => null
     case t: java.sql.Timestamp => t
-    case TimeInMillis(ms) => new java.sql.Timestamp(ms)
+    case AsDateTimeConverter(x) => x.toSqlTimestamp
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #timestamp!")
   }
@@ -547,7 +547,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToDateTime(any: Any): DateTime = any match {
     case null => null
     case dt: DateTime => dt
-    case TimeInMillis(ms) => new DateTime(ms)
+    case AsDateTimeConverter(ms) => new DateTime(ms)
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #jodaDateTime!")
   }
@@ -559,7 +559,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToLocalDateTime(any: Any): LocalDateTime = any match {
     case null => null
     case ldt: LocalDateTime => ldt
-    case TimeInMillis(ms) => new LocalDateTime(ms)
+    case AsDateTimeConverter(ms) => new LocalDateTime(ms)
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #jodaLocalDateTime!")
   }
@@ -571,7 +571,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToLocalDate(any: Any): LocalDate = any match {
     case null => null
     case ld: LocalDate => ld
-    case TimeInMillis(ms) => new LocalDate(ms)
+    case AsDateTimeConverter(ms) => new LocalDate(ms)
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #jodaLocalDate!")
   }
@@ -583,7 +583,7 @@ private[scalikejdbc] class RowDataResultSet(var currentRow: Option[RowData], var
   private def anyToLocalTime(any: Any): LocalTime = any match {
     case null => null
     case lt: LocalTime => lt
-    case TimeInMillis(ms) => new LocalTime(ms)
+    case AsDateTimeConverter(ms) => new LocalTime(ms)
     case other => throw new UnsupportedOperationException(
       s"Please send a feedback to the library maintainers about supporting ${other.getClass} for #jodaLocalTime!")
   }
