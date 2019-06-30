@@ -38,7 +38,7 @@ lazy val core = (project in file("core")).settings(
   },
   sbtPlugin := false,
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
-  scalacOptions ++= Seq("-deprecation", "-unchecked")
+  scalacOptions ++= Seq("-deprecation", "-unchecked"),
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, v)) if v <= 12 =>
