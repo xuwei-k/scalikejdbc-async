@@ -2,14 +2,9 @@ language: scala
 dist: xenial
 jdk:
 - openjdk8
-- openjdk11
-scala:
-- 2.13.2
-- 2.12.11
 sudo: false
 script:
-- sbt "++ ${TRAVIS_SCALA_VERSION}!" test
-- git diff --exit-code # check scalariform
+- sbt compile test:compile test
 before_script:
 - rm project/pgp.sbt && rm project/sbt-updates.sbt && rm project/sonatype.sbt
 - git add . --all

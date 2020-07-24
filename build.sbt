@@ -9,14 +9,13 @@ val Scala213 = "2.13.2"
 crossScalaVersions := Seq(Scala213, Scala212)
 
 lazy val unusedWarnings = Seq(
-  "-Ywarn-unused:imports"
 )
 
 lazy val core = (project in file("core")).settings(
   organization := "org.scalikejdbc",
   name := "scalikejdbc-async",
   version := _version,
-  scalaVersion := Scala212,
+  scalaVersion := "0.25.0-RC2",
   crossScalaVersions := Seq(Scala213, Scala212),
   publishTo := _publishTo(version.value),
   publishMavenStyle := true,
@@ -50,12 +49,23 @@ lazy val core = (project in file("core")).settings(
       "org.testcontainers"     %  "postgresql"                        % testContainer      % "test",
       "org.postgresql"         %  "postgresql"                        % postgresqlVersion  % "test",
       "mysql"                  %  "mysql-connector-java"              % "5.1.+"            % "test",
-      "org.scalatest"          %% "scalatest"                         % "3.2.0"            % "test",
       "ch.qos.logback"         %  "logback-classic"                   % "1.2.+"            % "test"
     )
   },
-  sbtPlugin := false,
-  transitiveClassifiers in Global := Seq(Artifact.SourceClassifier),
+  libraryDependencies := {
+    val groupIds = Set(
+      "org.scalatestplus",
+      "org.scalactic",
+      "org.scalatest"
+    )
+
+    libraryDependencies.value.map { lib =>
+      if (groupIds(lib.organization))
+        lib
+      else
+        lib.withDottyCompat(scalaVersion.value)
+    }
+  },
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-language:implicitConversions", "-feature") ++ unusedWarnings,
   Seq(Compile, Test).flatMap(
     c => scalacOptions in (c, console) --= unusedWarnings
