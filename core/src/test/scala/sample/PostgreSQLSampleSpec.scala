@@ -81,7 +81,7 @@ class PostgreSQLSampleSpec extends AnyFlatSpec with Matchers with DBSettings wit
           birthday = rs.get[Option[DateTime]](al.resultName.lunchtime),
           createdAt = rs.get[DateTime](al.resultName.createdAt))
       }).single.apply()
-    }.get
+    }.asInstanceOf[Option[AsyncLover]].get
     created.id should equal(generatedId)
     created.name should equal("Eric")
     created.rating should equal(2)
@@ -103,7 +103,7 @@ class PostgreSQLSampleSpec extends AnyFlatSpec with Matchers with DBSettings wit
     val generatedId = Await.result(generatedIdFuture, 5.seconds)
     val created = DB.readOnly { implicit s =>
       withSQL { select.from(AsyncLover as al).where.eq(al.id, generatedId) }.map(AsyncLover(al)).single.apply()
-    }.get
+    }.asInstanceOf[Option[AsyncLover]].get
     created.id should equal(generatedId)
     created.name should equal("Eric")
     created.rating should equal(2)
@@ -172,7 +172,7 @@ class PostgreSQLSampleSpec extends AnyFlatSpec with Matchers with DBSettings wit
       val generatedId = Await.result(generatedIdFuture, 5.seconds)
       val created = DB.readOnly { implicit s =>
         withSQL { select.from(AsyncLover as al).where.eq(al.id, generatedId) }.map(AsyncLover(al)).single.apply()
-      }.get
+      }.asInstanceOf[Option[AsyncLover]].get
       created.id should equal(generatedId)
       created.name should equal("Patric")
       created.rating should equal(2)
@@ -236,7 +236,7 @@ class PostgreSQLSampleSpec extends AnyFlatSpec with Matchers with DBSettings wit
       // should be found
       val created = DB.readOnly { implicit s =>
         withSQL { select.from(AsyncLover as al).where.eq(al.id, 997) }.map(AsyncLover(al)).single.apply()
-      }.get
+      }.asInstanceOf[Option[AsyncLover]].get
       created.id should equal(997)
       created.name should equal("Eric")
       created.rating should equal(2)

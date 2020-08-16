@@ -3,12 +3,9 @@ dist: xenial
 jdk:
 - openjdk8
 - openjdk11
-scala:
-- 2.13.3
-- 2.12.12
 sudo: false
 script:
-- sbt "++ ${TRAVIS_SCALA_VERSION}!" test
+- sbt test
 - git diff --exit-code # check scalariform
 before_script:
 - rm project/pgp.sbt && rm project/sbt-updates.sbt && rm project/sonatype.sbt
