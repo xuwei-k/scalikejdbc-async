@@ -1,9 +1,6 @@
 name: CI
 on:
-  pull_request:
   push:
-  schedule:
-  - cron: '0 23 * * 5'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -17,4 +14,6 @@ jobs:
         # TODO https://github.com/scalikejdbc/scalikejdbc-async/issues/162
         java-version: "adopt@1.8.0-282"
     - uses: coursier/cache-action@v6
-    - run: sbt -v scalafmtSbtCheck "+ scalafmtAll" "+ test"
+    - run: docker images
+    - run: sbt -v test
+    - run: docker images
