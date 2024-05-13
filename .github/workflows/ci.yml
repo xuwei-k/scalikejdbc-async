@@ -18,4 +18,6 @@ jobs:
       with:
         java-version: "${{ matrix.java }}"
         distribution: adopt
+    - run: ./collect-docker-stats.sh &
     - run: sbt -v scalafmtSbtCheck "+ scalafmtCheckAll" "+ test"
+    - run: cat docker-stats >> $GITHUB_STEP_SUMMARY
